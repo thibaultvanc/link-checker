@@ -17,8 +17,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "fabpot/goutte": "^4.0",
-        "illuminate/support": "^6.0"
+        "fabpot/goutte": "^4.0"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",
