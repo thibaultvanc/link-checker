@@ -6,7 +6,6 @@ use Goutte\Client;
 use Symfony\Component\HttpClient\HttpClient;
 use Thibaultvanc\LinkChecker\CheckerResponse;
 
-
 class LinkChecker
 {
     public $url;
@@ -47,10 +46,9 @@ class LinkChecker
     }
     public function verify() : CheckerResponse
     {
-        
         try {
             $crawler = $this->client->request('GET', $this->url);
-           // dd(__CLASS__. 'line :' .__LINE__, '____   $crawler   ____', $this->client->getResponse()->getStatusCode());
+            // dd(__CLASS__. 'line :' .__LINE__, '____   $crawler   ____', $this->client->getResponse()->getStatusCode());
             $this->response->pageExists = true;
             $this->response->statusCode = $this->client->getResponse()->getStatusCode();
             if ($this->response->statusCode !== 200) {
@@ -87,7 +85,7 @@ class LinkChecker
 
 
         if ($this->anchor) {
-            $this->response->anchorOk = \Str::snake($this->response->anchor) === \Str::snake($this->anchor);
+            $this->response->anchorOk = $this->to_camel_case($this->response->anchor) === $this->to_camel_case($this->anchor);
         }
         $this->response->noFollowOk = $rel !== 'nofollow';
         
@@ -99,6 +97,15 @@ class LinkChecker
 
         
         return $this->response;
-        
+    }
+
+
+    private function to_camel_case($str, $capitalise_first_char = false)
+    {
+        if ($capitalise_first_char) {
+            $str[0] = strtoupper($str[0]);
+        }
+        $func = create_function('$c', 'return strtoupper($c[1]);');
+        return preg_replace_callback('/_([a-z])/', $func, $str);
     }
 }
