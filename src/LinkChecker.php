@@ -82,10 +82,10 @@ class LinkChecker
         $childNodes = $node->childNodes;
         $this->response->anchor = strip_tags($node->ownerDocument->saveHTML($node));
        
-
+        //dd($this->response->anchor);
 
         if ($this->anchor) {
-            $this->response->anchorOk = $this->to_camel_case($this->response->anchor) === $this->to_camel_case($this->anchor);
+            $this->response->anchorOk = strpos($this->to_camel_case($this->response->anchor), $this->to_camel_case($this->anchor));
         }
         $this->response->noFollowOk = $rel !== 'nofollow';
         
@@ -106,6 +106,7 @@ class LinkChecker
             $str[0] = strtoupper($str[0]);
         }
         
+        // $func = create_function('$c', 'return strtoupper($c[1]);');
         return preg_replace_callback('/_([a-z])/', function ($c) {
             return strtoupper($c[1]);
         }, $str);
