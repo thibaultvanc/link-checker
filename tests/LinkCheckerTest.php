@@ -180,6 +180,8 @@ class LinkCheckerTest extends TestCase
                         ->anchor('good_anchor')
                         ->verify();
 
+        //dd(__CLASS__. 'line :' .__LINE__, '____   $response   ____', $response);
+
         $this->assertTrue($response->pageExists);
         $this->assertEquals(200, $response->statusCode);
         $this->assertTrue($response->linkExists);

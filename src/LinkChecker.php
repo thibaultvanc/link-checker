@@ -48,7 +48,7 @@ class LinkChecker
     {
         try {
             $crawler = $this->client->request('GET', $this->url);
-            // dd(__CLASS__. 'line :' .__LINE__, '____   $crawler   ____', $this->client->getResponse()->getStatusCode());
+             //dd(__CLASS__. 'line :' .__LINE__, '____   $crawler   ____', $this->client->getResponse()->getStatusCode());
             $this->response->pageExists = true;
             $this->response->statusCode = $this->client->getResponse()->getStatusCode();
             if ($this->response->statusCode !== 200) {
@@ -62,6 +62,9 @@ class LinkChecker
             return $this->response;
         }
 
+        
+
+
         try {
             $link = $crawler->filter('a[href="' . $this->href . '"]')->link();
         } catch (\Throwable $th) {
@@ -74,6 +77,8 @@ class LinkChecker
             return $this->response;
         }
 
+        //dd(__CLASS__. 'line :' .__LINE__, '____   $response   ____', $this->response);
+
         $node = $link->getNode();
         $rel = $node->getAttribute('rel');
         $this->response->rel = $rel ?: null;
@@ -85,7 +90,9 @@ class LinkChecker
         //dd($this->response->anchor);
 
         if ($this->anchor) {
-            $this->response->anchorOk = strpos($this->to_camel_case($this->response->anchor), $this->to_camel_case($this->anchor));
+           // dd(__CLASS__. 'line :' .__LINE__, '____ H E R E  ____', trim($this->anchor), trim($this->response->anchor));
+            $this->response->anchorOk = trim($this->anchor) == trim($this->response->anchor);
+            //$this->response->anchorOk = dd(strpos($this->to_camel_case($this->anchor), $this->to_camel_case($this->response->anchor)));
         }
         $this->response->noFollowOk = $rel !== 'nofollow';
         
