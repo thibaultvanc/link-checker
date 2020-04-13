@@ -42,5 +42,23 @@ class RealLinkCheckerTest extends TestCase
         $this->assertNull($response->isDdestinationOk);
     }
 
+    /** * @test */
+    public function qsdssdqsdqsdqsd()
+    {
+        $checker = new LinkChecker(); 
+
+        $response = $checker->url('https://fr.rs-online.com/web/c/connecteurs/connecteurs-secteur-et-iec-et-accessoires/rallonges-electriques-et-enrouleurs/')
+                        ->href('https://fr.rs-online.com/web/c/connecteurs/connecteurs-secteur-et-iec-et-accessoires/rallonges-electriques-et-enrouleurs/')
+                        ->anchor('un enrouleur pour les outils électriques')
+                        ->verify();
+
+        $this->assertTrue($response->pageExists);
+        $this->assertEquals(200, $response->statusCode);
+        $this->assertTrue($response->linkExists);
+        $this->assertNull($response->rel);
+        $this->assertTrue($response->noFollowOk);
+        $this->assertTrue($response->isDdestinationOk);
+    }
+
 
 }
