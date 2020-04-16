@@ -189,21 +189,22 @@ class LinkCheckerTest extends TestCase
     {
         $checker = new LinkChecker();
  
-        $response = $checker->url('https://www.cesim.fr/habitat/les-outils-indispensables-pour-entretenir-le-jardin/')
-                         ->href(' https://fr.rs-online.com/web/c/connecteurs/connecteurs-secteur-et-iec-et-accessoires/rallonges-electriques-et-enrouleurs/')
-                         ->anchor('un enrouleur pour les outils électriques')
-                         ->redirect('https://journees-prevention-santepublique.fr')
+        $response = $checker->url('https://www.unaf.fr/spip.php?rubrique226')
+                         ->href('http://www.trainbienvivre.fr/presentation-bien-vivre.html')
+                         ->anchor('« bien vivre pour bien vieillir »')
+                         ->redirect('https://journees-prevention-santepublique.fr/')
                          ->verify();
  
  
         $this->assertTrue($response->pageExists);
         $this->assertEquals(200, $response->statusCode);
         $this->assertTrue($response->linkExists);
-        $this->assertEquals('un enrouleur pour les outils électriques', $response->anchor);
+        $this->assertEquals('&laquo;&nbsp;Bien vivre pour bien vieillir&nbsp;&raquo;', $response->anchor);
         $this->assertTrue($response->anchorOk);
-        $this->assertNull($response->rel);
+        $this->assertEquals('external', $response->rel);
         $this->assertTrue($response->noFollowOk);
         $this->assertTrue($response->isDdestinationOk);
         $this->assertEquals(200, $response->destinationStatusCode);
+        $this->assertEquals('https://journees-prevention-santepublique.fr/', $response->destinationUrl);
     }
 }

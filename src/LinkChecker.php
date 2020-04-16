@@ -110,10 +110,10 @@ class LinkChecker
 
             $this->response->anchor = $a[0]->innerHtml;
             if ($this->anchor) {
-                $this->response->anchorOk = $this->response->anchor == $this->anchor;
+                $this->response->anchorOk = snake_case(html_entity_decode($this->response->anchor)) === snake_case($this->anchor);
             }
 
-
+            // dd(snake_case($this->response->anchor) === snake_case($this->anchor), snake_case($this->response->anchor), snake_case($this->anchor));
             /**
              * destination page
              */
@@ -137,7 +137,9 @@ class LinkChecker
                 return $this->response;
             //echo 'La requête a mis ' . $info['total_time'] . ' secondes à être envoyée à ' . $info['url'];
             } else {
-                $lien = $this->href ?: $this->redirect;
+                $lien = $this->redirect ?: $this->href;
+
+                //dd(__CLASS__. 'line :' .__LINE__, '____   $info[] === $lien   ____', $info['url'] === $lien, $info['url'], $lien);
 
                 $this->response->destinationStatusCode = $info['http_code'] ;
                 $this->response->isDdestinationOk = $info['url'] === $lien && $info['http_code'] === 200;
