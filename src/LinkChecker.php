@@ -110,7 +110,7 @@ class LinkChecker
 
             $this->response->anchor = $a[0]->innerHtml;
             if ($this->anchor) {
-                $this->response->anchorOk = snake_case(html_entity_decode($this->response->anchor)) === snake_case($this->anchor);
+                $this->response->anchorOk = snake_case(html_entity_decode($this->response->anchor)) === snake_case(html_entity_decode($this->anchor));
             }
 
             // dd(snake_case($this->response->anchor) === snake_case($this->anchor), snake_case($this->response->anchor), snake_case($this->anchor));
