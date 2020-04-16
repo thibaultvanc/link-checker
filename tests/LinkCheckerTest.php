@@ -207,4 +207,26 @@ class LinkCheckerTest extends TestCase
         $this->assertEquals(200, $response->destinationStatusCode);
         $this->assertEquals('https://journees-prevention-santepublique.fr/', $response->destinationUrl);
     }
+
+    /** @test */
+    public function live_test_redirect301()
+    {
+        $checker = new LinkChecker();
+ 
+        $response = $checker->url('https://www.polemb.net/greffe-capillaire-quelle-technique-adopter-pour-un-meilleur-resultat/')
+                         ->href('https://journees-prevention-santepublique.fr/maladie/calvitie/echelle-norwood-hamilton-7-etapes-alopecie/')
+                         ->anchor('niveau de calvitie')
+                         ->verify();
+ 
+        $this->assertTrue($response->pageExists);
+        $this->assertEquals(200, $response->statusCode);
+        $this->assertTrue($response->linkExists);
+        // $this->assertEquals('« bien vivre pour bien vieillir »', $response->anchor);
+        $this->assertTrue($response->anchorOk);
+        //$this->assertEquals('external', $response->rel);
+        $this->assertTrue($response->noFollowOk);
+        $this->assertTrue($response->isDdestinationOk);
+        $this->assertEquals(200, $response->destinationStatusCode);
+        $this->assertEquals('https://journees-prevention-santepublique.fr/maladie/calvitie/echelle-norwood-hamilton-7-etapes-alopecie/', $response->destinationUrl);
+    }
 }

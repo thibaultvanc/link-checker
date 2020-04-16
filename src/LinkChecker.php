@@ -25,6 +25,8 @@ class LinkChecker
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_VERBOSE, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible;)");
         //curl_setopt($ch, CURLOPT_POST, true);
@@ -76,9 +78,9 @@ class LinkChecker
         //echo 'La requête a mis ' . $info['total_time'] . ' secondes à être envoyée à ' . $info['url'];
         } else {
             $this->response->statusCode = $info['http_code'];
-            $this->response->pageExists = $this->response->statusCode === 200;
+            $this->response->pageExists = true;
         }
-
+        //dd(__CLASS__. 'line :' .__LINE__, '____ H E R E  ____', $info);
         /**
          * link exists
          */
@@ -90,7 +92,7 @@ class LinkChecker
 
 
 
-
+        //dd(__CLASS__. 'line :' .__LINE__, '____   $a   ____', $this->html, $this->client);
   
 
         // dd(__CLASS__. 'line :' .__LINE__, '____   $a   ____', $a[0]->getAttribute['rel']);
