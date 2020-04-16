@@ -45,7 +45,7 @@ class LinkChecker
     }
     public function href($href)
     {
-        $this->href = $href;
+        $this->href = trim($href);
         return $this;
     }
     public function anchor($anchor)
@@ -73,18 +73,24 @@ class LinkChecker
             $this->response->pageExists = $this->response->statusCode === 200;
         }
 
-
         /**
          * link exists
          */
+        
 
         $dom = new Dom;
         $dom->load($this->html);
         $a = $dom->find('a[href="' . $this->href . '"]');
 
 
+
+
+  
+
         // dd(__CLASS__. 'line :' .__LINE__, '____   $a   ____', $a[0]->getAttribute['rel']);
         if (isset($a[0])) {
+            //dd(__CLASS__. 'line :' .__LINE__, '____ H E R E  ____', $this->response);
+
             $this->response->linkExists = true;
             $this->response->rel = $a[0]->getAttribute('rel');
             /* try {
