@@ -48,16 +48,7 @@ class LinkCheckerTest extends TestCase
     /** @test */
     public function The_url_does_not_exists()
     {
-        $client =
-            [
-                '<a href="not-match">bla bla</a>',
-                ['http_code'=>404],
-                //new MockResponse('html>Destination Page</html>')
-            ]
-        ;
-
-
-        $checker = new LinkChecker($client);
+        $checker = new LinkChecker();
 
         
         $response = $checker->url('https://organit.com/not-exists') //not Exists
@@ -70,5 +61,98 @@ class LinkCheckerTest extends TestCase
         $this->assertNull($response->noFollowOk);
         $this->assertNull($response->isDdestinationOk);
         $this->assertNull($response->destinationStatusCode);
+    }
+
+    /** @test */
+    public function the_link_is_not_present_on_the_page()
+    {
+        $checker = new LinkChecker();
+ 
+        $response = $checker->url('https://organit.fr/agence_developpement_web_06/competence_web')
+                         ->href('NON')
+                         ->verify();
+ 
+ 
+        $this->assertTrue($response->pageExists);
+        $this->assertEquals(200, $response->statusCode);
+        $this->assertFalse($response->linkExists);
+        $this->assertNull($response->noFollowOk);
+        $this->assertNull($response->isDdestinationOk);
+        $this->assertNull($response->destinationStatusCode);
+    }
+
+
+    /** @test */
+    public function The_link_contains_nofollow()
+    {
+        $checker = new LinkChecker();
+  
+        $response = $checker->url('https://organit.fr')
+                          ->href('https://organit.fr/admin')
+                          ->verify();
+        //dd(__CLASS__. 'line :' .__LINE__, '____   $response   ____', $response);
+        $this->assertTrue($response->pageExists);
+        $this->assertEquals(200, $response->statusCode);
+        $this->assertTrue($response->linkExists);
+        $this->assertEquals('nofollow', $response->rel);
+        $this->assertFalse($response->noFollowOk);
+        $this->assertFalse($response->isDdestinationOk);
+        $this->assertEquals(200, $response->destinationStatusCode);
+        $this->assertEquals('https://organit.fr/login', $response->destinationUrl); //////redirection
+    }
+
+
+    /** @test */
+    public function the_destination_page_is_broken()
+    {
+        /* $client = new MockHttpClient(
+            [
+                new MockResponse('<a href="https://organit.fr/agence_developpement_web_06/contact" >bla bla</a>'),
+                new MockResponse('', ['http_code'=>404]),
+            ]
+        ); */
+        $checker = new LinkChecker();
+
+        $response = $checker->url('https://organit.fr')
+                        ->href('https://organit.fr/not-exists')
+                        ->verify();
+        //dd(__CLASS__. 'line :' .__LINE__, '____   $response   ____', $response);
+        $this->assertTrue($response->pageExists);
+        $this->assertEquals(200, $response->statusCode);
+        $this->assertTrue($response->linkExists);
+        $this->assertEquals('nofollow', $response->rel);
+        $this->assertFalse($response->noFollowOk);
+        $this->assertFalse($response->isDdestinationOk);
+        $this->assertEquals(404, $response->destinationStatusCode);
+    }
+
+
+    /** @test */
+    public function the_anchor_is_ok()
+    {
+        /*  $client = new MockHttpClient(
+             [
+                 new MockResponse('<a href="https://organit.fr/agence_developpement_web_06/contact" >good_anchor</a>'),
+                 new MockResponse('', ['http_code'=>404]),
+             ]
+         ); */
+        $checker = new LinkChecker();
+ 
+        $response = $checker->url('https://organit.fr')
+                         ->href('https://organit.fr/agence_developpement_web_06/contact')
+                         ->anchor('Agence Web Nice - Cannes - Grasse ( 06 )')
+                         ->verify();
+ 
+        //dd(__CLASS__. 'line :' .__LINE__, '____   $response   ____', $response);
+ 
+        $this->assertTrue($response->pageExists);
+        $this->assertEquals(200, $response->statusCode);
+        $this->assertTrue($response->linkExists);
+        $this->assertEquals('Agence Web Nice - Cannes - Grasse ( 06 )', $response->anchor);
+        $this->assertTrue($response->anchorOk);
+        $this->assertNull($response->rel);
+        $this->assertTrue($response->noFollowOk);
+        $this->assertTrue($response->isDdestinationOk);
+        $this->assertEquals(200, $response->destinationStatusCode);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Thibaultvanc\LinkChecker\Tests;
+namespace Thibaultvanc\LinkChecker\symfonyOld\Tests;
 
 use Goutte\Client;
 use Orchestra\Testbench\TestCase;
@@ -52,7 +52,6 @@ class LinkCheckerTestOLD extends TestCase
     }
 
 
-    /** @test */
     public function The_url_does_not_exists()
     {
         $client = new MockHttpClient(
@@ -76,7 +75,6 @@ class LinkCheckerTestOLD extends TestCase
         $this->assertNull($response->destinationStatusCode);
     }
 
-    /** @test */
     public function the_link_is_not_present_on_the_page()
     {
         $client = new MockHttpClient(
