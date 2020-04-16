@@ -12,6 +12,7 @@ class LinkChecker
     public $url;
     public $tag = 'a';
     public $href;
+    public $redirect;
     public $anchor;
     public $client;
     public $html;
@@ -46,6 +47,11 @@ class LinkChecker
     public function href($href)
     {
         $this->href = trim($href);
+        return $this;
+    }
+    public function redirect($redirect)
+    {
+        $this->redirect = trim($redirect);
         return $this;
     }
     public function anchor($anchor)
@@ -131,8 +137,10 @@ class LinkChecker
                 return $this->response;
             //echo 'La requête a mis ' . $info['total_time'] . ' secondes à être envoyée à ' . $info['url'];
             } else {
+                $lien = $this->href ?: $this->redirect;
+
                 $this->response->destinationStatusCode = $info['http_code'] ;
-                $this->response->isDdestinationOk = $info['url'] === $this->href && $info['http_code'] === 200;
+                $this->response->isDdestinationOk = $info['url'] === $lien && $info['http_code'] === 200;
                 $this->response->destinationUrl = $info['url'];
                 //dd(__CLASS__. 'line :' .__LINE__, '____ H E R E  ____', $info, $this->response);
             }
